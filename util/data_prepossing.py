@@ -74,9 +74,3 @@ def tokenized_clean_list(text) -> list:
     return clean_list
 
 
-if __name__ == "__main__":
-    sample_text = only_text(
-        'Haha South Tampa is getting flooded hah- WAIT A SECOND I LIVE IN SOUTH TAMPA WHAT AM I GONNA DO '
-        'WHAT AM I GONNA DO FVCK #flooding,1 http://www.flooding.com')
-    clean_lists = tokenized_clean_list(sample_text)
-    print(clean_lists)

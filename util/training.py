@@ -3,9 +3,6 @@ from pandas import DataFrame
 
 from util import only_text, tokenized_clean_list
 
-import torch
-from torch.utils.data import DataLoader, random_split  # some vaildation is necessary
-
 
 def training_data_cleaning(raw_training_data_path) -> DataFrame:
     raw_train_df = pd.read_csv(raw_training_data_path)
