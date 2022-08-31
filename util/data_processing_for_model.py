@@ -49,7 +49,7 @@ def vectorized_data_and_padding(cleaned_train_df, clean_test_df):
     longest_len = max(max(len(elem) for elem in X_train),max(len(elem) for elem in X_test))
     vocab = build_vocab_from_iterator(yield_tokens(X), specials=["<pad>"])
     text_pipeline = lambda t: vocab(t)
-    X_train_ready, X_test_ready, Y_train_ready = [], [], torch.tensor(Y_train, dtype=torch.int64)
+    X_train_ready, X_test_ready, Y_train_ready = [], [], torch.tensor(Y_train, dtype=torch.float32)
     for i in range(len(Y_train)):
         processed_text = torch.tensor(text_pipeline(X_train[i]), dtype=torch.int64)
         padding = torch.zeros(longest_len - len(processed_text), dtype=torch.int64)

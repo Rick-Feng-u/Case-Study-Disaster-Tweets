@@ -19,12 +19,11 @@ class DisasterTweetsBidirectionalGRU(nn.Module):
 
     def forward(self, input):
         output = self.embedding(input)
-        output = F.relu(output)
-        output, hidden = self.gru(output)
+        output, hidden_state = self.gru(output)
+        output = torch.cat((hidden_state[-2, :, :], hidden_state[-1, :, :]), dim=1)
         output = self.dropout1(output)
         output = F.relu(self.fc1(output))
         output = self.dropout2(output)
         output = self.fc2(output)
         output = torch.sigmoid(output)
-        return output
-
+        return output.reshape(-1)
