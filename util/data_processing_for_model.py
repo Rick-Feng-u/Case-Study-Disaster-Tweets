@@ -52,14 +52,14 @@ def vectorized_data_and_padding(cleaned_train_df, clean_test_df):
     X_train_ready, X_test_ready, Y_train_ready = [], [], torch.tensor(Y_train, dtype=torch.int64)
     for i in range(len(Y_train)):
         processed_text = torch.tensor(text_pipeline(X_train[i]), dtype=torch.int64)
-        padding = torch.zeros(longest_len - len(processed_text))
+        padding = torch.zeros(longest_len - len(processed_text), dtype=torch.int64)
         padded_text = torch.cat((processed_text, padding))
         X_train_ready.append(padded_text)
 
     for i in range(len(X_test)):
         processed_text = torch.tensor(text_pipeline(X_test[i]), dtype=torch.int64)
-        padding = torch.zeros(longest_len - len(processed_text))
+        padding = torch.zeros(longest_len - len(processed_text), dtype=torch.int64)
         padded_text = torch.cat((processed_text, padding))
         X_test_ready.append(padded_text)
 
-    return X_train_ready, Y_train_ready, X_test_ready
+    return X_train_ready, Y_train_ready, X_test_ready, vocab
