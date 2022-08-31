@@ -50,7 +50,7 @@ def test_data_prediction(csv_output_path, test_loader, ids, model):
             sequence = sequence.to(device)
             predicted = model(sequence)
             y_predicted = [1 if each > 0.5 else 0 for each in predicted]
-            id_with_target = [ids[i], y_predicted]
+            id_with_target = [ids[i], y_predicted[0]]
             submission_df.loc[len(submission_df)] = id_with_target
 
     submission_df.to_csv(csv_output_path, encoding='utf-8', index=False)
