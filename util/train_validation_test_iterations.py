@@ -1,4 +1,5 @@
 import torch
+import pandas as pd
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -6,12 +7,12 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 def train(train_loader, num_epochs, model, criterion, optimizer):
     n_total_steps = len(train_loader)
     for epoch in range(num_epochs):
-        for i, (images, labels) in enumerate(train_loader):
-            images = images.to(device)
+        for i, (sequence, labels) in enumerate(train_loader):
+            sequence = sequence.to(device)
             labels = labels.to(device)
 
             # Forward pass
-            outputs = model(images)
+            outputs = model(sequence)
             loss = criterion(outputs, labels)
 
             # Backward and optimize
@@ -27,10 +28,10 @@ def evaluation(validation_loader, model):
     with torch.no_grad():
         n_correct = 0
         n_samples = 0
-        for images, labels in validation_loader:
-            images = images.to(device)
+        for sequence, labels in validation_loader:
+            sequence = sequence.to(device)
             labels = labels.to(device)
-            outputs = model(images)
+            outputs = model(sequence)
             y_predicted = [1 if each > 0.5 else 0 for each in outputs]
             n_samples += labels.size(0)
             for i in range(len(y_predicted)):
@@ -40,4 +41,16 @@ def evaluation(validation_loader, model):
         acc = 100.0 * n_correct / n_samples
         print(f'Accuracy of the network: {acc} %')
 
-#def test_data_prediction():
+
+def test_data_prediction(csv_output_path, test_loader, ids, model):
+    submission_df = pd.DataFrame(columns=['id', 'target'])
+    with torch.no_grad():
+        for i in range(len(test_loader)):
+            sequence = test_loader[i].reshape(1, -1)
+            sequence = sequence.to(device)
+            predicted = model(sequence)
+            y_predicted = [1 if each > 0.5 else 0 for each in predicted]
+            id_with_target = [ids[i], y_predicted]
+            submission_df.loc[len(submission_df)] = id_with_target
+
+    submission_df.to_csv(csv_output_path, encoding='utf-8', index=False)

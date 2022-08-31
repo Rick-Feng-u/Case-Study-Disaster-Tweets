@@ -34,7 +34,7 @@ def testing_data_cleaning(raw_testing_data_path) -> DataFrame:
     raw_test_df['Tokenized_list'] = raw_test_df['clean_text'].apply(lambda t: tokenized_clean_list(t))  # clean
     # text is now tokenized
 
-    cleaned_test_df = pd.DataFrame([raw_test_df.Tokenized_list]).transpose()
+    cleaned_test_df = pd.DataFrame([raw_test_df.id, raw_test_df.Tokenized_list]).transpose()
     return cleaned_test_df
 
 
@@ -44,9 +44,10 @@ def yield_tokens(data_iter) -> list:
 
 
 def vectorized_data_and_padding(cleaned_train_df, clean_test_df):
-    X_train, Y_train, X_test = cleaned_train_df['Tokenized_list'].to_list(), cleaned_train_df['target'].to_list(), clean_test_df['Tokenized_list'].to_list()
+    X_train, Y_train, X_test = cleaned_train_df['Tokenized_list'].to_list(), cleaned_train_df['target'].to_list(), \
+                               clean_test_df['Tokenized_list'].to_list()
     X = X_train + X_test
-    longest_len = max(max(len(elem) for elem in X_train),max(len(elem) for elem in X_test))
+    longest_len = max(max(len(elem) for elem in X_train), max(len(elem) for elem in X_test))
     vocab = build_vocab_from_iterator(yield_tokens(X), specials=["<pad>"])
     text_pipeline = lambda t: vocab(t)
     X_train_ready, X_test_ready, Y_train_ready = [], [], torch.tensor(Y_train, dtype=torch.float32)

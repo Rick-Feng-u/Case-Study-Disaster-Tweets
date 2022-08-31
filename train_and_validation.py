@@ -21,6 +21,7 @@ if __name__ == "__main__":
 
     input_size = len(vocab)
     hidden_size = 256
+    learning_rate = 0.01
 
     train_dataset = dataset(X_train, Y_train)
     train_loader = load_data(train_dataset)
@@ -31,7 +32,7 @@ if __name__ == "__main__":
     GRU_classfication_model = DisasterTweetsBidirectionalGRU(input_size, hidden_size)
 
     criterion = nn.BCELoss()
-    optimizer = torch.optim.Adam(GRU_classfication_model.parameters(), lr=0.01)
+    optimizer = torch.optim.Adam(GRU_classfication_model.parameters(), lr=learning_rate)
 
     train(train_loader, num_epochs, GRU_classfication_model, criterion, optimizer)
     evaluation(validation_loader, GRU_classfication_model)
