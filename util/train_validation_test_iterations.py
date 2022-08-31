@@ -42,13 +42,15 @@ def evaluation(validation_loader, model):
         print(f'Accuracy of the network: {acc} %')
 
 
-def test_data_prediction(test_loader, model):
+def test_data_prediction(test_loader, ids, model):
     submission_df = pd.DataFrame(columns=['id', 'target'])
     with torch.no_grad():
-        for idx, sequence in enumerate(test_loader):
+        for i in range(len(test_loader)):
+            sequence = test_loader[i].reshape(1, -1)
             sequence = sequence.to(device)
             predicted = model(sequence)
-            id_with_target = [idx, predicted]
+            y_predicted = [1 if each > 0.5 else 0 for each in predicted]
+            id_with_target = [ids[i], y_predicted]
             submission_df.loc[len(submission_df)] = id_with_target
 
     return submission_df
