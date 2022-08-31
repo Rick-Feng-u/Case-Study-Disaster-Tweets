@@ -1,26 +1,25 @@
 import re
-import nltk
 import string
-
-import spacy
 
 from stop_words import get_stop_words
 from nltk.corpus import stopwords
 from nltk.stem import *
 
-nlp = spacy.load("en_core_web_sm")
+from torchtext.data import get_tokenizer
+
 stop_words = list(get_stop_words('en'))
 nltk_words = list(stopwords.words('english'))
 stop_words.extend(nltk_words)
 
 stemmer = PorterStemmer()
+tokenizer = get_tokenizer("basic_english")
 
 
 def lowercase_words(text) -> string:
     return text.lower()
 
 
-def no_url(text) -> string:
+def no_url(text: string) -> string:
     return re.sub(r'https?://\S+|www\.\S+', "", text)
 
 
@@ -52,11 +51,7 @@ def only_text(text) -> string:
 
 
 def tokenized(text) -> list:
-    token_text = nlp(text)
-    clean_list = []
-    for token in token_text:
-        clean_list.append(token.text)
-    return clean_list
+    return tokenizer(text)
 
 
 def stopword_removed(l) -> list:
@@ -72,5 +67,3 @@ def tokenized_clean_list(text) -> list:
     clean_list = stopword_removed(clean_list)
     clean_list = list_stemming(clean_list)
     return clean_list
-
-

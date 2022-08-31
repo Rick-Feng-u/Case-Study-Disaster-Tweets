@@ -19,3 +19,5 @@ def training_data_cleaning(raw_training_data_path) -> DataFrame:
     return cleaned_train_df
 
 
+def vectorized_data_and_padding(cleaned_df):
+    return

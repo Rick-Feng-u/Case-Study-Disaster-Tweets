@@ -1,2 +1,2 @@
 from .data_prepossing import only_text, tokenized_clean_list
-from.training import training_data_cleaning
+from.data_processing_for_model import training_data_cleaning
