@@ -4,14 +4,19 @@ from util import training_data_cleaning, testing_data_cleaning, vectorized_data_
 import torch
 import torch.nn as nn
 
+TRAINING_DATA_PATH = "data/train.csv"
+TESTING_DATA_PATH = "data/test.csv"
+SUBMISSION_CSV_OUTPUT_PATH = "data/submissions.csv"
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 num_epochs = 2
 batch_size = 64
 
+
 if __name__ == "__main__":
-    train_df = training_data_cleaning("data/train.csv")
-    test_df = testing_data_cleaning("data/test.csv")
+    train_df = training_data_cleaning(TRAINING_DATA_PATH)
+    test_df = testing_data_cleaning(TESTING_DATA_PATH)
 
     test_ids = test_df['id'].to_list()
 
@@ -30,5 +35,5 @@ if __name__ == "__main__":
     optimizer = torch.optim.Adam(GRU_classfication_model.parameters(), lr=learning_rate)
 
     train(train_loader, num_epochs, GRU_classfication_model, criterion, optimizer)
-    df = test_data_prediction(x_test, test_ids, GRU_classfication_model)
-    print(df.head())
+    test_data_prediction(SUBMISSION_CSV_OUTPUT_PATH, x_test, test_ids, GRU_classfication_model)
+

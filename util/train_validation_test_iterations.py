@@ -42,7 +42,7 @@ def evaluation(validation_loader, model):
         print(f'Accuracy of the network: {acc} %')
 
 
-def test_data_prediction(test_loader, ids, model):
+def test_data_prediction(csv_output_path, test_loader, ids, model):
     submission_df = pd.DataFrame(columns=['id', 'target'])
     with torch.no_grad():
         for i in range(len(test_loader)):
@@ -53,4 +53,4 @@ def test_data_prediction(test_loader, ids, model):
             id_with_target = [ids[i], y_predicted]
             submission_df.loc[len(submission_df)] = id_with_target
 
-    return submission_df
+    submission_df.to_csv(csv_output_path, encoding='utf-8', index=False)
