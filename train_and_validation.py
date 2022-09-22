@@ -1,5 +1,7 @@
 from util import training_data_cleaning, testing_data_cleaning, vectorized_data_and_padding, \
-    DisasterTweetsBidirectionalGRU, dataset, load_data, train, evaluation
+     dataset, load_data
+
+from script import DisasterTweetsBidirectionalGRU, train, evaluation
 
 import torch
 import torch.nn as nn
